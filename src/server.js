@@ -16,15 +16,24 @@ app.use(cors({
 
 app.use(express.json()); // Permite leer el body en formato JSON
 // CONEXIÓN A MONGODB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+// Desde Mongoose v6+ las opciones useNewUrlParser/useUnifiedTopology son innecesarias
+// y causan advertencias del driver. Pasamos solo la URI.
+mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('✅ Conectado a MongoDB'))
 .catch(err => console.error('❌ Error de conexión DB:', err));
 
 app.use('/api/juegos', juegosRoutes);
 app.use('/api/reseñas', reseñasRoutes);
+
+// Ruta raíz informativa para evitar "Cannot GET /" en el navegador
+app.get('/', (req, res) => {
+  res.send('API del proyecto - endpoints: /api/juegos, /api/reseñas');
+});
+
+// Handler para rutas no encontradas (JSON)
+app.use((req, res) => {
+  res.status(404).json({ error: 'Ruta no encontrada' });
+});
 
 // INICIAR SERVIDOR
 app.listen(PORT, () => {
