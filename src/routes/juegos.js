@@ -17,6 +17,7 @@ router.get('/:id', async (req, res) => {
     const juego = await Game.findById(req.params.id);
     res.json(juego);
   } catch (error) {
+    console.error('Error al obtener los juegos:', error);
     res.status(500).json({ error: 'Error al obtener el juego' });
   }
 });

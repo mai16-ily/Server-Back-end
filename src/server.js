@@ -16,14 +16,12 @@ app.use(cors({
 
 app.use(express.json()); // Permite leer el body en formato JSON
 // CONEXIÓN A MONGODB
-mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('✅ Conectado a MongoDB'))
-  .catch(err => console.error('❌ Error de conexión DB:', err));
-    
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+})
+.then(() => console.log('✅ Conectado a MongoDB'))
+.catch(err => console.error('❌ Error de conexión DB:', err));
 
 app.use('/api/juegos', juegosRoutes);
 app.use('/api/reseñas', reseñasRoutes);
