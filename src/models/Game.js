@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const gameSchema = new mongoose.Schema({
-  id: { type: String, required: true, unique: true },
+  _id: ObjectId,
   titulo: { type: String, required: true },
   genero: { type: String, required: true },
   plataforma: { type: String, required: true },
