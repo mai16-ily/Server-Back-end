@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { router as juegosRoutes } from './routes/juegos.js';
-import { router as reseñasRoutes } from './routes/reseñas.js';
+import { router as resenasRoutes } from './routes/resenas.js';
 import dotenv from 'dotenv';
 
 
@@ -17,7 +17,6 @@ app.use(cors({
 
 app.use(express.json()); // Permite leer el body en formato JSON
 
-// Middleware para loguear todas las solicitudes
 app.use((req, res, next) => {
   console.log(`📨 ${req.method} ${req.path}`);
   next();
@@ -29,7 +28,8 @@ mongoose.connect(process.env.MONGODB_URI)
 .catch(err => console.error('❌ Error de conexión DB:', err));
 
 app.use('/api/juegos', juegosRoutes);
-app.use('/api/reseñas', reseñasRoutes);
+app.use('/api/resenas', resenasRoutes);
+
 
 
 app.get('/', (req, res) => {

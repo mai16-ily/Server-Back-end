@@ -3,7 +3,6 @@ import { Review } from '../models/Review.js';
 
 export const router = express.Router();
 
-// IMPORTANTE: Esta ruta específica debe ir ANTES que la ruta GET /
 router.get('/juego/:juegoId', async (req, res) => {
   try {
     console.log(`📝 Buscando reseñas para juego: ${req.params.juegoId}`);
