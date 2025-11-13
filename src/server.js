@@ -17,6 +17,12 @@ app.use(cors({
 
 app.use(express.json()); // Permite leer el body en formato JSON
 
+// Middleware para loguear todas las solicitudes
+app.use((req, res, next) => {
+  console.log(`📨 ${req.method} ${req.path}`);
+  next();
+});
+
 
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => console.log('✅ Conectado a MongoDB'))

@@ -3,6 +3,18 @@ import { Review } from '../models/Review.js';
 
 export const router = express.Router();
 
+// IMPORTANTE: Esta ruta específica debe ir ANTES que la ruta GET /
+router.get('/juego/:juegoId', async (req, res) => {
+  try {
+    console.log(`📝 Buscando reseñas para juego: ${req.params.juegoId}`);
+    const reseñas = await Review.find({ juegoId: req.params.juegoId });
+    console.log(`✅ Se encontraron ${reseñas.length} reseñas`);
+    res.json(reseñas);
+  } catch (error) {
+    console.error('❌ Error al obtener reseñas del juego:', error);
+    res.status(500).json({ error: 'Error al obtener reseñas del juego' });
+  }
+});
 
 router.get('/', async (req, res) => {
   try {
@@ -13,24 +25,28 @@ router.get('/', async (req, res) => {
   }
 });
 
-
-router.get('/juego/:juegoId', async (req, res) => {
-  try {
-    const reseñas = await Review.find({ juegoId: req.params.juegoId });
-    res.json(reseñas);
-  } catch (error) {
-    res.status(500).json({ error: 'Error al obtener reseñas del juego' });
-  }
-});
-
 router.post('/', async (req, res) => {
+  console.log("🔴🔴🔴 POST /api/reseñas recibido 🔴🔴🔴");
   try {
+    console.log("📥 Datos recibidos para crear reseña:", req.body);
+    
+    if (!req.body.juegoId) {
+      console.error("❌ juegoId es requerido");
+      return res.status(400).json({ error: 'juegoId es requerido' });
+    }
+
     const nueva = new Review(req.body);
+    console.log("💾 Guardando reseña...");
     const guardada = await nueva.save();
+    console.log("✅ Reseña guardada exitosamente:", guardada._id);
     res.status(201).json(guardada);
   } catch (error) {
-    console.error("❌ Error al crear reseña:", error); // 👈 añade esto
-    res.status(400).json({ error: 'Error al crear la reseña', detalles: error.message });
+    console.error("❌ Error al crear reseña:", error.message); 
+    res.status(400).json({ 
+      error: 'Error al crear la reseña', 
+      detalles: error.message,
+      stack: error.stack
+    });
   }
 });
 
