@@ -23,16 +23,17 @@ router.get('/juego/:juegoId', async (req, res) => {
   }
 });
 
-
 router.post('/', async (req, res) => {
   try {
     const nueva = new Review(req.body);
     const guardada = await nueva.save();
     res.status(201).json(guardada);
   } catch (error) {
-    res.status(400).json({ error: 'Error al crear la reseña' });
+    console.error("❌ Error al crear reseña:", error); // 👈 añade esto
+    res.status(400).json({ error: 'Error al crear la reseña', detalles: error.message });
   }
 });
+
 
 router.put('/:id', async (req, res) => {
   try {
